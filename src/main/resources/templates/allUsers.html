@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>User info</title>
+    <title>All Users</title>
 </head>
 <body>
 <div th:align="right">
@@ -24,17 +24,23 @@
             <th>email</th>
         </tr>
         </thead>
-        <tr>
+        <tr th:each="user : ${users}">
             <td th:utext="${user.getId()}"></td>
             <td th:utext="${user.getFirstName()}"></td>
             <td th:utext="${user.getLastName()}"></td>
             <td th:utext="${user.getAge()}"></td>
             <td th:utext="${user.getUsername()}"></td>
             <td th:utext="${user.getEmail()}"></td>
+            </td>
+            <td>
+                <a th:href="@{/editUser/{id}(id=${user.getId()})}">Update</a>
+            <td>
+                <a th:href="@{/deleteUser/{id}(id=${user.getId()})}">Delete</a>
+            </td>
         </tr>
     </table>
-
-
+    <br>
+    <button onclick="window.location.href = '/new'">Add new user</button>
 </table>
 </body>
 </html>

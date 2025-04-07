@@ -18,7 +18,7 @@
         <input type="submit" value="Logout"/>
     </form>
 </div>
-<form th:method="PATCH" th:action="@{/updateUser/{id}(id=${user.getId()})}" th:object="${user}">
+<form th:method="POST" th:action="@{/admin/updateUser/{id}(id=${user.getId()})}" th:object="${user}">
 
     <label for="name">Enter name :</label>
     <input type="text" th:field="*{firstName}" id="name"/>

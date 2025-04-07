@@ -33,14 +33,14 @@
             <td th:utext="${user.getEmail()}"></td>
             </td>
             <td>
-                <a th:href="@{/editUser/{id}(id=${user.getId()})}">Update</a>
+                <a th:href="@{/admin/editUser/{id}(id=${user.getId()})}">Update</a>
             <td>
-                <a th:href="@{/deleteUser/{id}(id=${user.getId()})}">Delete</a>
+                <a th:href="@{/admin/deleteUser/{id}(id=${user.getId()})}">Delete</a>
             </td>
         </tr>
     </table>
     <br>
-    <button onclick="window.location.href = '/new'">Add new user</button>
+    <button onclick="window.location.href = 'admin/new'">Add new user</button>
 </table>
 </body>
 </html>

@@ -5,7 +5,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.service.RoleService;
@@ -28,25 +27,22 @@ public class AdminController {
         this.userService = userService;
     }
 
+
     @GetMapping()
-    public String showAllUsers(ModelMap model) {
+    public String showAllUsers(@AuthenticationPrincipal User user, ModelMap model) {
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("user", user);
+        model.addAttribute("newuser", new User());
+        model.addAttribute("allRoles", roleService.getAllRoles());
+        model.addAttribute("activePage", "allUsers");
         return "allUsers";
     }
 
-    @GetMapping(value ="/new")
-    public String createUserForm(Model model) {
-        model.addAttribute("newuser", new User());
-        return "new_user";
-    }
-
     @PostMapping(value = "/createUser")
-    public String createUser( @Valid @ModelAttribute("newuser") User user, BindingResult bindingResult, @RequestParam ArrayList<String> listRoleId) {
-        if (bindingResult.hasErrors()) {
-            return "new_user";
-        }
+    public String createUser( @Valid @ModelAttribute("newuser") User user, @RequestParam ArrayList<String> roles) {
+
         Set<Role> userRole = new HashSet<>();
-        for (String roleId : listRoleId) {
+        for (String roleId : roles) {
             Role role = roleService.getById(Long.parseLong(roleId));
             userRole.add(role);
         }
@@ -55,19 +51,10 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "/editUser/{id}")
-    public String editUser(@PathVariable("id") int id, Model model) {
-        User user = userService.getUser(id);
-        model.addAttribute("user", user);
-        return "edit_page";
-    }
-
     @PostMapping(value = "/updateUser/{id}")
-    public String updateUser(@ModelAttribute("user") @Valid User user,
-                             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "edit_page";
-        }
+    public String updateUser(@PathVariable("id") int id, Model model, @ModelAttribute("user") User user) {
+        User user_fromDB = userService.getUser(id);
+        model.addAttribute("user", user_fromDB);
         userService.updateUser(user);
         return "redirect:/admin";
     }

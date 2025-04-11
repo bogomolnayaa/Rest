@@ -29,6 +29,7 @@ public class UserController {
     @GetMapping
     public String getHome(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
+        model.addAttribute("activePage", "user");
         return "user";
     }
 }

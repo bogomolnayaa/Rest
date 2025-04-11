@@ -47,8 +47,12 @@ public class UserServiceImpl implements UserService {
         @Transactional
         @Override
         public void updateUser(User user) {
-            String encode = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encode);
+            String encode = user.getPassword();
+            if (encode.isEmpty()) {
+                user.setPassword(getUser(user.getId()).getPassword());
+            } else {
+                passwordChanged(user, encode);
+            }
             userRepository.save(user);
         }
 
@@ -57,4 +61,12 @@ public class UserServiceImpl implements UserService {
         public void removeUser(long id) {
             userRepository.deleteById(id);
         }
+
+        @Override
+        public void passwordChanged(User user, String encode) {
+            encode = passwordEncoder.encode(encode);
+            user.setPassword(encode);
+        }
+
+
 }

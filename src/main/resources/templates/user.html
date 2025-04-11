@@ -1,40 +1,108 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>User info</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>User page</title>
 </head>
 <body>
-<div th:align="right">
-    Your login is: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
-    <form th:action="@{/logout}">
-        <input type="submit" value="Logout"/>
-    </form>
+
+<nav class="navbar navbar-dark bg-dark">
+    <p class="text-white mb-0">
+        <strong th:text="${user.getUsername()}"></strong><span th:text="' with roles: '" />
+        <span th:each="role,iter : ${user.getRoles()}"
+              th:text="${role} + (${iter.last} ? '' : ', ')"></span>
+    </p>
+    <a class="btn btn-link" href="/logout" role="button"><p class="text-secondary mb-0">Logout</p></a>
+</nav>
+
+<div class="container-fluid">
+    <!-- Content here -->
+    <div class="row">
+
+        <div class="col-first col-md-2 bd-sidebar">
+            <div class="bg-white vh-100 m-0 p-0 w-100">
+                <ul class="nav nav-pills flex-column">
+                    <!-- Кнопка Admin (только для ROLE_ADMIN) -->
+                    <li class="nav-item w-100" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                        <a class="nav-link"
+                           th:class="${activePage == 'allUsers'} ? 'nav-link active' : 'nav-link'"
+                           th:href="@{/admin}">
+                            Admin
+                        </a>
+                    </li>
+
+                    <!-- Кнопка User (для всех) -->
+                    <li class="nav-item w-100">
+                        <a class="nav-link"
+                           th:class="${activePage == 'user'} ? 'nav-link active' : 'nav-link'"
+                           th:href="@{/user}">
+                            User
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-second col-md-10 bg-light bd-center">
+            <h1>User information-page</h1>
+            <div class="border h5 pl-3 pt-2 pb-2 m-0">
+                About user
+            </div>
+            <div class="bg-white border p-3">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th>Roles</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td th:text="${user.getId()}"></td>
+                        <td th:text="${user.getUsername()}"></td>
+                        <td th:text="${user.getFirstName()}"></td>
+                        <td th:text="${user.getLastName()}"></td>
+                        <td th:text="${user.getAge()}"></td>
+                        <td th:text="${user.getEmail()}"></td>
+                        <td>
+                            <span th:each="role,iter : ${user.getRoles()}">
+                            <span th:text="${role.toString()}"></span><!--
+                         --><span th:text="${iter.last} ? '' : ','"></span><!--
+                         --></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+
 </div>
-<table>
-    <table border="1">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>first name</th>
-            <th>last name</th>
-            <th>age</th>
-            <th>username</th>
-            <th>email</th>
-        </tr>
-        </thead>
-        <tr>
-            <td th:utext="${user.getId()}"></td>
-            <td th:utext="${user.getFirstName()}"></td>
-            <td th:utext="${user.getLastName()}"></td>
-            <td th:utext="${user.getAge()}"></td>
-            <td th:utext="${user.getUsername()}"></td>
-            <td th:utext="${user.getEmail()}"></td>
-        </tr>
-    </table>
 
 
-</table>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,21 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>User page</title>
 </head>
 <body>
-
+<!--Навигационная панель-->
 <nav class="navbar navbar-dark bg-dark">
-    <p class="text-white mb-0">
-        <strong th:text="${user.getUsername()}"></strong><span th:text="' with roles: '" />
-        <span th:each="role,iter : ${user.getRoles()}"
-              th:text="${role} + (${iter.last} ? '' : ', ')"></span>
-    </p>
+    <!-- Navbar content -->
+    <div>
+        <h4>
+            <!--            <p class="text-white mb-0">-->
+            <!--                <th:block th:text="${user.getUsername()} + ' with roles: '">user with roles: USER</th:block>-->
+            <!--                <th:block th:each="role : ${user.getRoles()}" th:text="${role} + ' '"></th:block>-->
+            <!--            </p>-->
+            <p class="text-white mb-0 small font-weight-light">
+                <span id="headerUsername"></span>
+                <span class="font-weight-bold">with roles:</span>
+                <span id="headerRoles"></span>
+            </p>
+        </h4>
+    </div>
     <a class="btn btn-link" href="/logout" role="button"><p class="text-secondary mb-0">Logout</p></a>
 </nav>
 
@@ -23,29 +35,12 @@
     <!-- Content here -->
     <div class="row">
 
-        <div class="col-first col-md-2 bd-sidebar">
-            <div class="bg-white vh-100 m-0 p-0 w-100">
-                <ul class="nav nav-pills flex-column">
-                    <!-- Кнопка Admin (только для ROLE_ADMIN) -->
-                    <li class="nav-item w-100" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-                        <a class="nav-link"
-                           th:class="${activePage == 'allUsers'} ? 'nav-link active' : 'nav-link'"
-                           th:href="@{/admin}">
-                            Admin
-                        </a>
-                    </li>
-
-                    <!-- Кнопка User (для всех) -->
-                    <li class="nav-item w-100">
-                        <a class="nav-link"
-                           th:class="${activePage == 'user'} ? 'nav-link active' : 'nav-link'"
-                           th:href="@{/user}">
-                            User
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <div class="col-2 pt-3 pl-0 pr-0">
+            <nav class="nav flex-column nav-pills">
+                <a class="nav-link active" href="/user">User</a>
+            </nav>
         </div>
+
 
         <div class="col-second col-md-10 bg-light bd-center">
             <h1>User information-page</h1>
@@ -58,29 +53,13 @@
                     <tr>
                         <th>ID</th>
                         <th>Username</th>
-                        <th>Firstname</th>
-                        <th>Lastname</th>
                         <th>Age</th>
-                        <th>Email</th>
-                        <th>Roles</th>
+                        <th>Role</th>
                     </tr>
                     </thead>
 
-                    <tbody>
-                    <tr>
-                        <td th:text="${user.getId()}"></td>
-                        <td th:text="${user.getUsername()}"></td>
-                        <td th:text="${user.getFirstName()}"></td>
-                        <td th:text="${user.getLastName()}"></td>
-                        <td th:text="${user.getAge()}"></td>
-                        <td th:text="${user.getEmail()}"></td>
-                        <td>
-                            <span th:each="role,iter : ${user.getRoles()}">
-                            <span th:text="${role.toString()}"></span><!--
-                         --><span th:text="${iter.last} ? '' : ','"></span><!--
-                         --></span>
-                        </td>
-                    </tr>
+                    <tbody id="userPanelBody">
+
                     </tbody>
                 </table>
             </div>
@@ -104,5 +83,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script src="/user.js">
+
+</script>
 </body>
 </html>
